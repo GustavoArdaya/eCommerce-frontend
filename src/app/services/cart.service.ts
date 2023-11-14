@@ -38,9 +38,30 @@ export class CartService {
     }
 
     // compute cart total price and quantity
-    this.computeCartTotals();
-  
+    this.computeCartTotals();  
   }
+
+  decrementQuantity(theCartItem: CartItem) {
+    theCartItem.quantity--;
+
+    if (theCartItem.quantity === 0) {
+      this.remove(theCartItem);
+    } else {
+      this.computeCartTotals();
+    }
+  }
+
+  remove(theCartItem: CartItem) {
+    // get index
+    const itemIndex = this.cartItems.findIndex(item => item.id == theCartItem.id);
+    // if found remove item at given index
+    if (itemIndex > -1) {
+      this.cartItems.splice(itemIndex, 1);
+
+      this.computeCartTotals();
+    }
+  }
+
   computeCartTotals() {
     let totalPriceValue: number = 0;
     let totalQuantityValue: number = 0;
