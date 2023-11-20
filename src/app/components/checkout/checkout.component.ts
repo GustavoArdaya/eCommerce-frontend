@@ -87,16 +87,23 @@ export class CheckoutComponent implements OnInit {
   onSubmit() {
     console.log('Handling form botton');
     console.log('customer: ' + this.checkoutFormGroup.get('customer')!.value);
-    console.log('billing address:' + this.checkoutFormGroup.get('billingAddress')!.value);
-    console.log('shipping address' + this.checkoutFormGroup.get('shippingAddress')!.value);
+    
+    console.log('shipping address country: ' + this.checkoutFormGroup.get('shippingAddress')!.value.country.name);
+    console.log('shipping address state: ' + this.checkoutFormGroup.get('shippingAddress')!.value.state.name);
+
+    
   }
 
   copyShippingAddressToBillingAddress($event: any) {
     if ($event.target.checked) {
       this.checkoutFormGroup.controls['billingAddress']
       .setValue(this.checkoutFormGroup.controls['shippingAddress'].value);
+
+      this.billingAddressStates = this.shippingAddressStates;
     } else {
       this.checkoutFormGroup.controls['billingAddress'].reset();
+
+      this.billingAddressStates = [];
     }
   }
 
@@ -122,8 +129,8 @@ export class CheckoutComponent implements OnInit {
       const countryCode = formGroup.value.country.code;
       const countryName = formGroup.value.country.name;
 
-      console.log(`{formGroupName} country code: ${countryCode}`);
-      console.log(`{formGroupName} country name: ${countryName}`);
+      console.log(`${formGroupName} country code: ${countryCode}`);
+      console.log(`${formGroupName} country name: ${countryName}`);
 
       this.commerceFormService.getStates(countryCode).subscribe(data => {
         if (formGroupName === 'shippingAddress') {
