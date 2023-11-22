@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
 import { CommerceFormService } from 'src/app/services/commerce-form.service';
+import { EcommerceValidators } from 'src/app/validators/ecommerce-validators';
 
 @Component({
   selector: 'app-checkout',
@@ -33,8 +34,8 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
-        firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-        lastName: new FormControl('', [Validators.required, Validators.minLength(2)]),
+        firstName: new FormControl('', [Validators.required, Validators.minLength(2), EcommerceValidators.notOnlyWhitespace]),
+        lastName: new FormControl('', [Validators.required, Validators.minLength(2), EcommerceValidators.notOnlyWhitespace]),
         email: new FormControl('', 
           [Validators.required, Validators.pattern('^[a-z0-9.-%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]
         )
@@ -88,6 +89,11 @@ export class CheckoutComponent implements OnInit {
 
   onSubmit() {
     console.log('Handling form botton');
+
+    if (this.checkoutFormGroup.invalid) {
+      this.checkoutFormGroup.markAllAsTouched();
+    }
+
     console.log('customer: ' + this.checkoutFormGroup.get('customer')!.value);
     
     console.log('shipping address country: ' + this.checkoutFormGroup.get('shippingAddress')!.value.country.name);
@@ -95,6 +101,10 @@ export class CheckoutComponent implements OnInit {
 
     
   }
+
+  get firstName() { return this.checkoutFormGroup.get('customer.firstName'); }
+  get lastName() { return this.checkoutFormGroup.get('customer.lastName'); }
+  get email() { return this.checkoutFormGroup.get('customer.email'); }
 
   copyShippingAddressToBillingAddress($event: any) {
     if ($event.target.checked) {
