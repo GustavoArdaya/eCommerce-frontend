@@ -355,7 +355,7 @@
                                             Credit Card Number is Required
                                         </div>
 
-                                        <div *ngIf="creditCardNumber.errors?.['minlength']">
+                                        <div *ngIf="creditCardNumber.errors?.['pattern']">
                                             Credit Card Number must be 16 digits long
                                         </div>
                                 </div>
@@ -375,7 +375,7 @@
                                             Security Code is Required
                                         </div>
 
-                                        <div *ngIf="creditCardSecurityCode.errors?.['minlength']">
+                                        <div *ngIf="creditCardSecurityCode.errors?.['pattern']">
                                             Security Code must be 3 digits long
                                         </div>
                                 </div>

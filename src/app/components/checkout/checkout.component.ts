@@ -173,8 +173,7 @@ export class CheckoutComponent implements OnInit {
     let purchase = new Purchase();
 
     // populate purchase - customer
-    purchase.customer = this.checkoutFormGroup.controls['customer'].value;
-    
+    purchase.customer = this.checkoutFormGroup.controls['customer'].value;    
     
     // populate purchase - shipping address
     purchase.shippingAddress = this.checkoutFormGroup.controls['shippingAddress'].value;
@@ -187,12 +186,14 @@ export class CheckoutComponent implements OnInit {
     purchase.billingAddress = this.checkoutFormGroup.controls['billingAddress'].value;
     const billingState: State = JSON.parse(JSON.stringify(purchase.billingAddress.state));
     const billingCountry: Country = JSON.parse(JSON.stringify(purchase.billingAddress.country));
-    purchase.shippingAddress.state = billingState.name;
-    purchase.shippingAddress.country = billingCountry.name;
+    purchase.billingAddress.state = billingState.name;
+    purchase.billingAddress.country = billingCountry.name;
 
     // populate purchase - order and orderItems
     purchase.order = order;
     purchase.orderItems = orderItems;
+
+    console.log(purchase);
 
     // call REST api via the CheckoutService
     this.checkoutService.placeOrder(purchase).subscribe(
