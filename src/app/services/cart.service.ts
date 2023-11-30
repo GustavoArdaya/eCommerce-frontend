@@ -95,6 +95,7 @@ export class CartService {
 
     // persist cart data
     this.persistCartItems();
+    
   }
 
   persistCartItems() {
