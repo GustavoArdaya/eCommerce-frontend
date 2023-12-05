@@ -40,6 +40,7 @@ const routes: Routes = [
   { path: 'login/callback', component: OktaCallbackComponent },
   { path: 'login', component: LoginComponent },
   { path: 'members', component: MembersPageComponent, canActivate: [ OktaAuthGuard ], data: { onAuthRequired: sendToLoginPage} },
+  { path: 'order-history', component: OrderHistoryComponent, canActivate: [ OktaAuthGuard ], data: { onAuthRequired: sendToLoginPage} },
   { path: 'search/:keyword', component: ProductListComponent },
   { path: 'category/:id', component: ProductListComponent },
   { path: 'category', component: ProductListComponent },
