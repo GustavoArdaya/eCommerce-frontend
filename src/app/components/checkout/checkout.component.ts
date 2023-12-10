@@ -4,12 +4,14 @@ import { Router } from '@angular/router';
 import { Country } from 'src/app/common/country';
 import { Order } from 'src/app/common/order';
 import { OrderItem } from 'src/app/common/order-item';
+import { PaymentInfo } from 'src/app/common/payment-info';
 import { Purchase } from 'src/app/common/purchase';
 import { State } from 'src/app/common/state';
 import { CartService } from 'src/app/services/cart.service';
 import { CheckoutService } from 'src/app/services/checkout.service';
 import { CommerceFormService } from 'src/app/services/commerce-form.service';
 import { EcommerceValidators } from 'src/app/validators/ecommerce-validators';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-checkout',
@@ -32,6 +34,14 @@ export class CheckoutComponent implements OnInit {
   billingAddressStates: State[] = [];
 
   storage: Storage = sessionStorage;
+
+  // initialize Stripe API
+
+  stripe = Stripe(environment.stripePublishableKey);
+
+  paymentInfo: PaymentInfo = new PaymentInfo();
+  cardElement: any;
+  displayError: any = "";
 
   constructor(
     private formBuilder: FormBuilder,
@@ -100,6 +110,8 @@ export class CheckoutComponent implements OnInit {
           EcommerceValidators.notOnlyWhitespace])
       }),
       creditCard: this.formBuilder.group({
+
+        /*
         cardType: new FormControl('', [
           Validators.required]),
         nameOnCard: new FormControl('', [
@@ -114,9 +126,12 @@ export class CheckoutComponent implements OnInit {
           Validators.pattern('[0-9]{3}')]),
         expirationMonth: [''],
         expirationYear: ['']
+        */
+
       })
     });
 
+    /*
     // populate credit card months and years dropdowns
 
     const startMonth: number = new Date().getMonth() + 1;
@@ -131,6 +146,7 @@ export class CheckoutComponent implements OnInit {
       console.log("Retrieved credit card years: " + JSON.stringify(data));
       this.creditCardYears = data;
     });
+    */
 
     // populate countries
 
