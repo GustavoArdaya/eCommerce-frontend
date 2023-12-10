@@ -54,6 +54,9 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit(): void {
 
+    // setup Stripe payment form
+    this.setupStripePaymentForm();
+
     this.reviewCartDetails();
 
     // read user's email from browser storage
@@ -154,6 +157,32 @@ export class CheckoutComponent implements OnInit {
       console.log("Retrieved countries: " + JSON.stringify(data));
       this.countries = data;
     })
+  }
+  setupStripePaymentForm() {
+    
+    // get a handle to stripe elements
+    var elements = this.stripe.elements();
+
+    // Create a card element and hide the zip-code field
+    this.cardElement = elements.create('card', { hidePostalCode: true});
+
+    // Add instance of card UI component into the 'card-element' div
+    this.cardElement.mount('#card-element');
+
+    // Add event binding for the 'change' event on card element
+    this.cardElement.on('change', (event: any) => {
+      
+      // get handle to card-errors element
+      this.displayError = document.getElementById('card-errors');
+
+      if (event.complete) {
+        this.displayError.textContent = "";
+      } else if (event.error) {
+        // show validation error to customer
+        this.displayError.textContent = event.error.message;
+      }
+
+    });
   }
 
   reviewCartDetails() {
