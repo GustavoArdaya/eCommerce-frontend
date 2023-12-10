@@ -159,7 +159,7 @@ export class CheckoutComponent implements OnInit {
     })
   }
   setupStripePaymentForm() {
-    
+
     // get a handle to stripe elements
     var elements = this.stripe.elements();
 
@@ -243,22 +243,24 @@ export class CheckoutComponent implements OnInit {
     purchase.order = order;
     purchase.orderItems = orderItems;
 
-    console.log(purchase);
+    // compute payment info
+    this.paymentInfo.amount = this.totalPrice * 100;
+    this.paymentInfo.currency = "USD";
 
-    // call REST api via the CheckoutService
-    this.checkoutService.placeOrder(purchase).subscribe(
-      {
-        next: response => {
-          alert(`Your order has been received.\nOrder tracking number: ${response.orderTrackingNumber}`);
-
-          // reset cart
-          this.resetCart();
-        },
-        error: err => {
-          alert(`There was an error: ${err.message}`);
+    // if form is valid, create payment intent, confirm card payment and place order
+    if (!this.checkoutFormGroup.invalid && this.displayError.textContent === "") {
+      this.checkoutService.createPaymentIntent(this.paymentInfo).subscribe(
+        (paymentIntentResponse) => {
+          this.stripe.confirmCardPayment(
+            paymentIntentResponse.client_secret,
+            {
+              payment_method: {
+                card: this.cardElement
+              }
+            });
         }
-      }
-    )
+      );
+    }
 
     
 
