@@ -257,9 +257,31 @@ export class CheckoutComponent implements OnInit {
               payment_method: {
                 card: this.cardElement
               }
+            }, { handleActions: false })
+            .then((result: any) => {
+              if (result.error) {
+                // inform user of error
+                alert(`There was an error: ${result.error.message}`);
+              } else {
+                // call REST API via CheckoutService
+                this.checkoutService.placeOrder(purchase).subscribe({
+                  next: (response: any) => {
+                    alert(`Your order has been received.\nOrder tracking numner: ${response.orderTrackingNumber}`);
+
+                    // reset cart
+                    this.resetCart();
+                  },
+                  error: (err: any) => {
+                    alert(`There was an error: ${err.message}`);
+                  } 
+                })
+              }
             });
         }
       );
+    } else {
+      this.checkoutFormGroup.markAllAsTouched();
+      return;
     }
 
     
