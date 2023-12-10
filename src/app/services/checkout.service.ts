@@ -9,7 +9,8 @@ import { environment } from 'src/environments/environment';
 })
 export class CheckoutService {
 
-  private purchaseUrl = environment +'/checkout/purchase';
+  private purchaseUrl = environment.ecommerceApiUrl +'/checkout/purchase';
+  private paymentIntentUrl = environment.ecommerceApiUrl +'/checkout/payment-intent';
 
   constructor(private http: HttpClient) { }
 
